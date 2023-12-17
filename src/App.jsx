@@ -1,25 +1,47 @@
+import React from 'react';
 import './App.css';
 import TaskList from './componentes/TaskList';
 import Titulo from './componentes/Header';
+import UseTaskManager from './hooks/hooks'; 
 
-const tasks = [
-  { id: 1, name: 'Completar el informe de ventas', completed: false },
-  { id: 2, name: 'Hacer ejercicio por 30 minutos', completed: true },
-  { id: 3, name: 'Ir de compras al supermercado', completed: false },
-  { id: 4, name: 'Llamar a mamá para su cumpleaños', completed: true },
-  { id: 5, name: 'Revisar y responder correos electrónicos', completed: false },
-  { id: 6, name: 'Preparar la cena', completed: true },
-  { id: 7, name: 'Leer un capítulo del libro actual', completed: false },
-  { id: 8, name: 'Hacer una caminata de 1 hora', completed: true },
-];
+const App = () => {
+  const {
+    tasks,
+    newTask,
+    setNewTask,
+    addTask,
+    editTask,
+    deleteTask,
+  } = UseTaskManager();
 
-function App() {
+  const handleTaskSubmission = (event) => {
+    event.preventDefault();
+    addTask();
+  };
+
   return (
     <div className="App">
-      <Titulo/>
-      <TaskList tasks={tasks} />
+      <Titulo />
+      <form onSubmit={handleTaskSubmission}>
+        <div className="task-container">
+          <div className="task-add">
+            <input
+              type="text"
+              placeholder="Nueva tarea"
+              value={newTask.name}
+              onChange={(e) => setNewTask({ ...newTask, name: e.target.value })}
+            />&nbsp; &nbsp;
+            <button type="submit">
+              <span role="img" aria-label="Agregar tarea">
+                ➕
+              </span>
+            </button>
+          </div>
+        </div>
+      </form>
+      <TaskList tasks={tasks} editTask={editTask} deleteTask={deleteTask} />
     </div>
   );
-}
+};
 
 export default App;
